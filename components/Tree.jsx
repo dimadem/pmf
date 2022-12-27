@@ -4,7 +4,7 @@ import { TreeContext } from "../context/tree.context";
 
 export default function GenerativeTree() {
   const { tree, useTree } = useContext(TreeContext);
-  console.log("TREE CONTEXT:", tree);
+  console.log("TREE СONTEXT:", tree);
 
   function constructScene() {
     let xAngle = 0;
@@ -99,10 +99,6 @@ export default function GenerativeTree() {
       <mesh position={[0, -1.5, 0]}>
         <cylinderGeometry />
         <meshStandardMaterial color="hotpink" />
-      </mesh>
-      <mesh position-y={-2} rotation-x={-Math.PI * 0.5} scale={6}>
-        <planeBufferGeometry />
-        <meshStandardMaterial color="green" side={DoubleSide} />
       </mesh>
     </group>
   );

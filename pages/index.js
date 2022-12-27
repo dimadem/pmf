@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import Connect from '../components/Connect';
 
+
 const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   // login is a boolean that is set to true if the user has connected their metamask
@@ -19,6 +20,7 @@ export default function Home() {
       <main className="bg-gray-300 w-screen h-screen flex justify-center">
         {/* description about project */}
         <div>Description</div>
+        <ConnectButton />
         {/* button to connect metamask */}
         <Connect />
         <div className="">
