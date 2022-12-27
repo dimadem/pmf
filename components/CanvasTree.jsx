@@ -3,20 +3,18 @@ import { OrbitControls } from "@react-three/drei";
 import GenerativeTree from "./Tree";
 import { useContext } from "react";
 import { TreeContext } from "../context/tree.context";
+import Plane from "./Plane";
 export default function CanvasTree(props) {
-  console.log("PROPS:", props);
   const { tree, setTreeState } = useContext(TreeContext);
-  console.log("TREE:", tree);
+  console.log("TREEContext in CanvasTree", tree);
   return (
     <>
       {/* Canvas */}
       <Canvas gl={{ antialias: false }}>
         {/* performance data */}
         {/* <Perf position="bottom-left" /> */}
-
         {/* background */}
         <color args={["lightgrey"]} attach="background" />
-
         {/* Effects */}
         {/* <EffectComposer>
           <DepthOfField
@@ -30,7 +28,6 @@ export default function CanvasTree(props) {
 
           <Vignette offset={0.1} darkness={0.6} />
         </EffectComposer> */}
-
         {/* Camera */}
         <OrbitControls
           // makeDefault
@@ -42,9 +39,10 @@ export default function CanvasTree(props) {
         {/* lights */}
         <ambientLight intensity={0.5} />
         <directionalLight position={[-10, 10, 5]} intensity={1.5} />
-
-        {/* Geometry */}
+        {/* Tree */}
         <GenerativeTree />
+        {/* Plane */}
+        <Plane />
       </Canvas>
     </>
   );

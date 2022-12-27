@@ -87,15 +87,10 @@ export default function useLsystem(metaMaskAdress) {
     setSentence(curSentence);
     setTrigger(true);
   }, []);
-  console.log("EXPORT FINAL SENTECE", sentence);
-
-  ///////////////////////////////CONTEXT///////////////////////////////////////////
-  const TreeContext = createContext();
-
-  const TreeContextProvider = ({
+  // console.log("EXPORT FINAL SENTECE", sentence);
+  return [
     sentence,
     trigger,
-    setTrigger,
     rule0,
     angle,
     segmentLength,
@@ -104,42 +99,5 @@ export default function useLsystem(metaMaskAdress) {
     radialModifier,
     color,
     texture,
-    children,
-  }) => {
-    // update tree state
-    const [treeState, setTreeState] = useState({
-      sentence,
-      trigger,
-      setTrigger,
-      rule,
-      angle,
-      segmentLength,
-      segmentRadius,
-      lengthModifier,
-      radialModifier,
-      color,
-      texture,
-    });
-
-    const setTree = () => {
-      setTreeState({
-        sentence,
-        trigger,
-        setTrigger,
-        rule,
-        angle,
-        segmentLength,
-        segmentRadius,
-        lengthModifier,
-        radialModifier,
-        color,
-        texture,
-      });
-    };
-    return (
-      <TreeContext.Provider value={{ tree: setTreeState, setTree }}>
-        {children}
-      </TreeContext.Provider>
-    );
-  };
+  ];
 }
