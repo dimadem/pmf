@@ -2,13 +2,12 @@ import Head from "next/head";
 import { Inter } from "@next/font/google";
 import Link from "next/link";
 import { useState } from "react";
+import Connect from '../components/Connect';
 
 const inter = Inter({ subsets: ["latin"] });
-
 export default function Home() {
   // login is a boolean that is set to true if the user has connected their metamask
   const [login, setLogin] = useState(false);
-
   return (
     <>
       <Head>
@@ -21,7 +20,7 @@ export default function Home() {
         {/* description about project */}
         <div>Description</div>
         {/* button to connect metamask */}
-        <button onClick={() => {}}>Connect MetaMask</button>
+        <Connect />
         <div className="">
           {login ? (
             // redirect to page
