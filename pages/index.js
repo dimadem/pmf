@@ -1,12 +1,13 @@
 import Head from "next/head";
 import { Inter } from "@next/font/google";
-import styles from "../styles/Home.module.css";
-import Lsystem from "../components/formula";
+import Link from "next/link";
+import { useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  Lsystem(3);
+  // login is a boolean that is set to true if the user has connected their metamask
+  const [login, setLogin] = useState(false);
 
   return (
     <>
@@ -16,11 +17,21 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>Get started with PMF;</p>
+      <main className="bg-gray-300 w-screen h-screen flex justify-center">
+        {/* description about project */}
+        <div>Description</div>
+        {/* button to connect metamask */}
+        <button onClick={() => {}}>Connect MetaMask</button>
+        <div className="">
+          {login ? (
+            // redirect to page
+            // go to tree page pmf.com/tree/${?????}
+            <Link href="/tree">See Tree</Link>
+          ) : (
+            // pop up metamask and then go to plant page pmf.com/plant/${?????}
+            <Link href="/plant"> Plant</Link>
+          )}
         </div>
-        <Canvas>{/* three js data */}</Canvas>
       </main>
     </>
   );
