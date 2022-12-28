@@ -1,16 +1,13 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import GenerativeTree from "./Tree";
-import { useContext } from "react";
-import { TreeContext } from "../context/tree.context";
-import Plane from "./Plane";
-export default function CanvasTree(props) {
-  const { tree, setTreeState } = useContext(TreeContext);
-  console.log("TREEContext in CanvasTree", tree);
+import GenerativeTree from "./Geometry/Tree";
+import Plane from "./Geometry/Plane";
+
+export default function CanvasFrame(props) {
   return (
     <>
       {/* Canvas */}
-      <Canvas gl={{ antialias: false }}>
+      <Canvas gl={{ antialias: false }} frameloop="demand">
         {/* performance data */}
         {/* <Perf position="bottom-left" /> */}
         {/* background */}

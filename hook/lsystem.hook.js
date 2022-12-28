@@ -1,6 +1,6 @@
-import { useEffect, useState, createContext } from "react";
+import { useEffect, useState } from "react";
 
-export default function useLsystem(metaMaskAdress) {
+export default function useLsystem(metamaskAddress) {
   // const [showMenu, setMenu] = useState(false);
   //аксиома для дерева - наш кошелек
   //если при создании графики будет слишком сложное дерево, можно обрезать аксиому - оставить 3-5 символов
@@ -8,11 +8,13 @@ export default function useLsystem(metaMaskAdress) {
   //0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
   //0x70997970C51812dc3A010C7d01b50e0d17dc79C8
   //0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
-  const [axiom, setAxiom] = useState(metaMaskAdress);
+  //0x90F79bf6EB2c4f870365E785982E1f101E93b906
+
+  const [axiom, setAxiom] = useState("");
   //количество ярусов дерева - итераций, возможно сочетать потом с возрастом дерева
   const [n, setN] = useState(3);
   //правила, задающие формулу дерева
-  const [sentence, setSentence] = useState(axiom);
+  const [sentence, setSentence] = useState("");
   const [numIterations, setIterations] = useState(3);
   //задаем соответствие символа из кошелька в формулу для кусочка дерева, отражающую эти символы
   //пока наугад, потом, когда прикрутим графику, можно будет поиграть формой дерева/веток/прочего
@@ -39,14 +41,25 @@ export default function useLsystem(metaMaskAdress) {
   //?
   const [texture, setTexture] = useState(false);
   const [trigger, setTrigger] = useState(true);
+  // console.log("DATA", data);
 
-  let curSentence = axiom;
-  let newSentence = "";
+  //переменные для формирования формулы дерева
+  // let curSentence = axiom
 
   //собираем формулу дерева по аксиоме и по заданным правилам
+
+  let curSentence = sentence;
+  let newSentence = "";
+
+  //при изменении кошелька, меняем аксиому и формулу дерева
+  useEffect(() => {
+    setAxiom(metamaskAddress);
+    setSentence(metamaskAddress);
+  }, [metamaskAddress]);
+
   useEffect(() => {
     for (let i = 1; i <= n; i++) {
-      for (let j = 0; j < curSentence.length; j++) {
+      for (let j = 0; j < sentence.length; j++) {
         switch (curSentence[j]) {
           case "F":
           case "f":
@@ -86,18 +99,24 @@ export default function useLsystem(metaMaskAdress) {
     }
     setSentence(curSentence);
     setTrigger(true);
-  }, []);
-  // console.log("EXPORT FINAL SENTECE", sentence);
+  }, [axiom]);
+
   return [
-    sentence,
-    trigger,
-    rule0,
-    angle,
-    segmentLength,
-    segmentRadius,
-    lengthModifier,
-    radialModifier,
-    color,
-    texture,
+    { axiom: axiom },
+    { n: n },
+    { sentence: sentence },
+    { numIterations: numIterations },
+    { rule0: rule0 },
+    { rule1: rule1 },
+    { rule2: rule2 },
+    { rule3: rule3 },
+    { angle: angle },
+    { segmentLength: segmentLength },
+    { segmentRadius: segmentRadius },
+    { lengthModifier: lengthModifier },
+    { radialModifier: radialModifier },
+    { color: color },
+    { texture: texture },
+    { trigger: trigger },
   ];
 }

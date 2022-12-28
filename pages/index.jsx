@@ -2,13 +2,14 @@ import Head from "next/head";
 import { Inter } from "@next/font/google";
 import Link from "next/link";
 import { useState } from "react";
-import Connect from '../components/Connect';
-
+import ConnectMetamask from "../components/ConnectMetamask";
 
 const inter = Inter({ subsets: ["latin"] });
+
 export default function Home() {
   // login is a boolean that is set to true if the user has connected their metamask
-  const [login, setLogin] = useState(false);
+  // const [login, setLogin] = useState(false);
+
   return (
     <>
       <Head>
@@ -17,21 +18,15 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="bg-gray-300 w-screen h-screen flex justify-center">
+      <main className="bg-gray-300 w-screen h-screen flex flex-col justify-center items-center">
         {/* description about project */}
-        <div>Description</div>
-        <ConnectButton />
+        {/* <div>Description</div> */}
+
         {/* button to connect metamask */}
-        <Connect />
         <div className="">
-          {login ? (
-            // redirect to page
-            // go to tree page pmf.com/tree/${?????}
-            <Link href="/tree">See Tree</Link>
-          ) : (
-            // pop up metamask and then go to plant page pmf.com/plant/${?????}
-            <Link href="/plant"> Plant</Link>
-          )}
+          <Link className="p-2 bg-slate-300 text-5xl" href="/plant">
+            plant
+          </Link>
         </div>
       </main>
     </>
