@@ -3,6 +3,9 @@ import { OrbitControls } from "@react-three/drei";
 import GenerativeTree from "./Geometry/Tree";
 import Plane from "./Geometry/Plane";
 
+// todo сделать квадртаный экран просмотра или делать снимок с квадратного экрана
+// todo добавить сохранение изображения
+
 export default function CanvasFrame(props) {
   return (
     <>

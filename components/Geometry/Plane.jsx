@@ -4,7 +4,7 @@ export default function Plane(params) {
     <>
       <mesh position-y={-2} rotation-x={-Math.PI * 0.5} scale={6}>
         <planeGeometry />
-        <meshStandardMaterial color="green" side={DoubleSide} />
+        <meshStandardMaterial color="darkgrey" side={DoubleSide} />
       </mesh>
     </>
   );
