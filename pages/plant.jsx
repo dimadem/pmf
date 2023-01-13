@@ -19,6 +19,7 @@ export default function plant() {
   return (
     <div className="w-screen h-screen">
       <div className="flex flex-col justify-center items-center">
+        {/* /подключение к метамаску ведет на новую страницу с ссылкой (адрес кошелька) */}
         <ConnectMetamask onSetMetamaskAddress={setMetamaskAddress} />
         <button
           className="rounded-sm bg-green-400 p-2"
@@ -26,6 +27,8 @@ export default function plant() {
         >
           Plant Tree
         </button>
+        // todo сохранение скриншота
+        <button>save img</button>
       </div>
       {/* <CanvasOld /> */}
       <CanvasFrame />

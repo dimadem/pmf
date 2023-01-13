@@ -48,15 +48,17 @@ export default function GenerativeTree() {
   let geometry = useMemo(() => {
     const g = new BufferGeometry();
     const points = [];
+
+    // функция точки
     const new_point = (x, y, z) => {
       points.push(new Vector3(x, y, z));
-    }
-    // добавить точки в массив
-    //points.push(new Vector3(0, -2, 0)); // start
+    };
+
     // angle xyz
     let y = -2;
     let z = 0;
     let x = 0;
+
     while (y < 5) {
       new_point(x, y, z);
       if (y % 2 == 0) {
@@ -70,11 +72,6 @@ export default function GenerativeTree() {
         z += 1;
       }
     }
-    //points.push(new Vector3(0, -1, 0)); // end
-    //points.push(new Vector3(1, -1, 1));
-    //points.push(new Vector3(1, 2, 3));
-
-
 
     // add points to geometry
     g.setFromPoints(points);
@@ -87,6 +84,12 @@ export default function GenerativeTree() {
     for (let i = 0; i < data.length; i++) {
       if (data[i] === "F") {
         console.log("F");
+      }
+      if (data[i] === "[") {
+        console.log("[");
+      }
+      if (data[i] === "]") {
+        console.log("]");
       }
     }
   }, [data]);
