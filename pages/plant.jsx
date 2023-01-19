@@ -3,6 +3,7 @@ import { TreeContext } from "../context/tree.context";
 import { useContext, useState } from "react";
 import ConnectMetamask from "../components/ConnectMetamask";
 import useLsystem from "../hook/lsystem.hook";
+import html2canvas from 'html2canvas';
 
 export default function plant() {
   const { setTree } = useContext(TreeContext);
@@ -16,8 +17,14 @@ export default function plant() {
     setTree(data);
   };
 
+  const saveCapture = () => {
+    html2canvas(document.querySelector("#top")).then(canvas => {
+      document.body.appendChild(canvas)
+    })
+  }
+
   return (
-    <div className="w-screen h-screen">
+    <div id="top" className="w-screen h-screen">
       <div className="flex flex-col justify-center items-center">
         {/* /подключение к метамаску ведет на новую страницу с ссылкой (адрес кошелька) */}
         <ConnectMetamask onSetMetamaskAddress={setMetamaskAddress} />
@@ -28,10 +35,12 @@ export default function plant() {
           Plant Tree
         </button>
         // todo сохранение скриншота
-        <button>save img</button>
+        <button onClick={saveCapture}>save img</button>
       </div>
+      <div id="capture">
       {/* <CanvasOld /> */}
       <CanvasFrame />
+      </div>
     </div>
   );
 }
