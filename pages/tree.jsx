@@ -1,1 +1,1 @@
-export default function tree(params) {}
+export default function Tree(params) {}
