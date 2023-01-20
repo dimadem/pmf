@@ -23,6 +23,7 @@ export const TreeContextProvider = ({ children }) => {
     { trigger: true },
   ]);
 
+  // set tree state
   const setTree = (data) => {
     setTreeState(data);
   };
