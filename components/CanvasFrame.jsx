@@ -1,16 +1,37 @@
-import { Canvas } from "@react-three/fiber";
+// import * as THREE from "three";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import GenerativeTree from "./Geometry/Tree";
 import Plane from "./Geometry/Plane";
+import UseScreenshot from "../hook/useScreenshot";
+// extend(THREE);
+
 
 // todo сделать квадртаный экран просмотра или делать снимок с квадратного экрана
 // todo добавить сохранение изображения
 
 export default function CanvasFrame(props) {
+
+  // const gl = useThree((state) => state.gl);
+  // const screenshot = () => {
+  //   const link = document.createElement("a");
+  //   link.setAttribute("download", "canvas.jpg");
+  //   link.setAttribute(
+  //     "href",
+  //     gl.domElement
+  //       .toDataURL("image/png")
+  //       .replace("image/png", "image/octed-stream")
+  //   );
+  //   link.click();
+  // };
+  // window.takeScreenShot = screenshot;
+
   return (
     <>
+                
+            
       {/* Canvas */}
-      <Canvas gl={{ antialias: false }} frameloop="demand">
+      <Canvas gl={{ antialias: false, preserveDrawingBuffer: true }} frameloop="demand">
         {/* performance data */}
         {/* <Perf position="bottom-left" /> */}
         {/* background */}
@@ -43,7 +64,9 @@ export default function CanvasFrame(props) {
         <GenerativeTree />
         {/* Plane */}
         <Plane />
+        <UseScreenshot/>
       </Canvas>
+      <button onClick={() => window.takeScreenshot()}>Скриншот нью</button>;
     </>
   );
 }
