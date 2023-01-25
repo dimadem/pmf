@@ -18,6 +18,7 @@ export default function plant() {
     setTree(data);
   };
 
+
   return (
     <div id="top" className="w-screen h-screen">
       <div className="flex flex-col justify-center items-center">
@@ -29,8 +30,8 @@ export default function plant() {
         >
           Plant Tree
         </button>
-        // todo сохранение скриншота
-        
+        // todo сохранение скриншота - done
+        <button className="rounded-sm bg-green-400 p-2" onClick={() => window.takeScreenshot()}>Скриншот</button>
       </div>
     <CanvasFrame/>
     </div>

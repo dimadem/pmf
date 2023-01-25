@@ -14,8 +14,6 @@ export default function CanvasFrame(props) {
 
   return (
     <>
-                
-      <button className="rounded-sm bg-green-400 p-2" onClick={() => window.takeScreenshot()}>Скриншот нью</button>
       {/* Canvas */}
       <Canvas gl={{ antialias: false, preserveDrawingBuffer: true }} frameloop="demand">
         {/* performance data */}
