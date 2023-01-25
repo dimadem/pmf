@@ -17,11 +17,5 @@ const UseScreenshot = () => {
     link.click();
   };
   window.takeScreenshot = screenshot;
-
-  // return (
-  //   <div>
-  //     <button onClick={() => window.takeScreenshot()}>Скриншот нью</button>;
-  //   </div>
-  // );
 };
 export default UseScreenshot;
