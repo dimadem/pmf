@@ -4,9 +4,7 @@ import { useContext, useState } from "react";
 import ConnectMetamask from "../components/ConnectMetamask";
 import useLsystem from "../hook/lsystem.hook";
 
-
-
-export default function plant() {
+export default function Plant() {
   const { setTree } = useContext(TreeContext);
   const [metamaskAddress, setMetamaskAddress] = useState("");
 
