@@ -1,6 +1,6 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { TreeContext } from "../../context/tree.context";
-import { TreeSegment } from "./TreeSegment";
+import { BufferGeometry, Vector3 } from "three";
 
 export default function GenerativeTree() {
   // context
@@ -27,7 +27,7 @@ export default function GenerativeTree() {
     trigger,
   ] = tree;
 
-  // check sentence
+  // check all data
   console.log("Tree data:", [
     sentence,
     angle,
@@ -41,112 +41,69 @@ export default function GenerativeTree() {
 
   // изначальные данные
   let data = sentence.sentence;
-  console.log("data:", data);
+  const startingPoint = new Vector3(0, 0, 0);
+  const endingPoint = new Vector3(0, 0, 0);
 
-  // начальные данные
-  let xAngle = 0;
-  let yAngle = 0;
-  let zAngle = 0;
-  let length = segmentLength.segmentLength;
-  let radius = segmentRadius.segmentRadius;
-  let states = [];
-  let prevLength = 0;
-  let prevSeg = useRef();
+  // попробуем нарисовать линию
+  let geometry = useMemo(() => {
+    const g = new BufferGeometry();
+    const points = [];
 
-  //! решить вопрос с предыдущим сегментом, что это такое к чему нужно добавлять обьект
+    // функция точки
+    const new_point = (x, y, z) => {
+      points.push(new Vector3(x, y, z));
+    };
 
-  // create tree segment
-  useEffect(() => {
-    for (let i = 0; i < sentence.sentence.length; i++) {
-      // Если F - создаем сегмент
-      if (sentence.sentence[i] === "F") {
-        let mySegment = TreeSegment(
-          length,
-          radius,
-          radialModifier.radialModifier,
-          xAngle,
-          yAngle,
-          zAngle,
-          lengthModifier.lengthModifier,
-          color.color,
-          texture.texture,
-          prevLength
-        );
+    // angle xyz
+    let y = -2;
+    let z = 0;
+    let x = 0;
 
-        //? что мы тут делаем?
-        // добавляем сегмент к предыдущему сегменту
-        // prevSeg.add(mySegment);
-        prevSeg = mySegment;
-        xAngle = 0;
-        yAngle = 0;
-        zAngle = 0;
-        prevLength = length;
-        length *= lengthModifier.lengthModifier;
-        radius *= radialModifier.radialModifier;
-
-        if (radius * radialModifier.radialModifier < 0.03) {
-          radius = 0.03;
-        }
-        if (length * lengthModifier.lengthModifier < 0.3) {
-          length = 0.3;
-        }
+    while (y < 5) {
+      new_point(x, y, z);
+      if (y % 2 == 0) {
+        x += 1;
       }
-
-      // Если + - ^ & < > - меняем углы
-      if (sentence.sentence[i] === "+") {
-        zAngle += angle.angle;
+      y += 1;
+      if (z >= 0) {
+        z -= 2;
       }
-      if (sentence.sentence[i] === "-") {
-        zAngle -= angle.angle;
+      if (z <= 0) {
+        z += 1;
       }
-      if (sentence.sentence[i] === "^") {
-        xAngle += angle.angle;
-      }
-      if (sentence.sentence[i] === "&") {
-        xAngle -= angle.angle;
-      }
-      if (sentence.sentence[i] === "<") {
-        yAngle += angle.angle;
-      }
-      if (sentence.sentence[i] === ">") {
-        yAngle -= angle.angle;
-      }
-
-      // Если [ - открываем ветку
-      if (sentence.sentence[i] === "[") {
-        states.push({
-          segment: prevSeg,
-          zAngle: zAngle,
-          yAngle: yAngle,
-          xAngle: xAngle,
-          length: length,
-          prevLength: prevLength,
-          radius: radius,
-        });
-      }
-
-      // Если ] - закрываем ветку
-      if (sentence.sentence[i] === "]") {
-        let lastState = states[states.length - 1];
-        prevSeg = lastState.segment;
-        zAngle = lastState.zAngle;
-        yAngle = lastState.yAngle;
-        xAngle = lastState.xAngle;
-        length = lastState.length;
-        prevLength = lastState.prevLength;
-        radius = lastState.radius;
-        states.pop();
-      }
-
-      // setTrigger(false);
     }
-  }, [sentence]);
+
+    // add points to geometry
+    g.setFromPoints(points);
+
+    return g;
+  }, []);
+
+  console.log("data:", data);
+  useEffect(() => {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i] === "F") {
+        console.log("F");
+      }
+      if (data[i] === "[") {
+        console.log("[");
+      }
+      if (data[i] === "]") {
+        console.log("]");
+      }
+    }
+  }, [data]);
 
   return (
-    <group>
-      <mesh>
-        <vector3 name="position" x={0} y={length / 2} z={0} />
-      </mesh>
-    </group>
+    <>
+      <line geometry={geometry} position={[0, 0, 0]} renderOrder="0">
+        <lineBasicMaterial
+          color="black"
+          linewidth={10}
+          linecap="round" //ignored by WebGLRenderer
+          linejoin="round" //ignored by WebGLRenderer
+        />
+      </line>
+    </>
   );
 }

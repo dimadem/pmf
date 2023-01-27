@@ -1,13 +1,21 @@
+// import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import GenerativeTree from "./Geometry/Tree";
 import Plane from "./Geometry/Plane";
+import UseScreenshot from "../hook/useScreenshot";
+
+
+
+// todo сделать квадртаный экран просмотра или делать снимок с квадратного экрана
+// todo добавить сохранение изображения
 
 export default function CanvasFrame(props) {
+
   return (
     <>
       {/* Canvas */}
-      <Canvas gl={{ antialias: false }} frameloop="demand">
+      <Canvas gl={{ antialias: false, preserveDrawingBuffer: true }} frameloop="demand">
         {/* performance data */}
         {/* <Perf position="bottom-left" /> */}
         {/* background */}
@@ -40,7 +48,9 @@ export default function CanvasFrame(props) {
         <GenerativeTree />
         {/* Plane */}
         <Plane />
+        <UseScreenshot/>
       </Canvas>
+      
     </>
   );
 }
