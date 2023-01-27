@@ -16,22 +16,28 @@ export default function Plant() {
     setTree(data);
   };
 
-
   return (
     <div className="w-screen h-screen">
       <div className="flex flex-col justify-center items-center">
         {/* /подключение к метамаску ведет на новую страницу с ссылкой (адрес кошелька) */}
         <ConnectMetamask onSetMetamaskAddress={setMetamaskAddress} />
+
+        {/* сгенерировать дерево */}
         <button
           className="rounded-sm bg-green-400 p-2"
           onClick={handleChangeTree}
         >
           Plant Tree
         </button>
-        // todo сохранение скриншота - done
-        <button className="rounded-sm bg-green-400 p-2" onClick={() => window.takeScreenshot()}>Скриншот</button>
+        {/* сделать скриншот */}
+        <button
+          className="rounded-sm bg-green-400 p-2"
+          onClick={() => window.takeScreenshot()}
+        >
+          Скриншот
+        </button>
       </div>
-    <CanvasFrame/>
+      <CanvasFrame />
     </div>
   );
 }
