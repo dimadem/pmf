@@ -20,7 +20,7 @@ export default function plant() {
 
 
   return (
-    <div id="top" className="w-screen h-screen">
+    <div className="w-screen h-screen">
       <div className="flex flex-col justify-center items-center">
         {/* /подключение к метамаску ведет на новую страницу с ссылкой (адрес кошелька) */}
         <ConnectMetamask onSetMetamaskAddress={setMetamaskAddress} />
