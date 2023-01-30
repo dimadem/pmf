@@ -3,12 +3,12 @@ import { Inter } from "@next/font/google";
 import Link from "next/link";
 import { useState } from "react";
 import ConnectMetamask from "../components/ConnectMetamask";
+import useLsystem from "../hook/lsystem.hook";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   // login is a boolean that is set to true if the user has connected their metamask
-  // const [login, setLogin] = useState(false);
 
   return (
     <>
@@ -19,15 +19,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="bg-gray-300 w-screen h-screen flex flex-col justify-center items-center">
-        {/* description about project */}
-        {/* <div>Description</div> */}
-
-        {/* button to connect metamask */}
-        <div className="">
-          <Link className="p-2 bg-slate-300 text-5xl" href="/plant">
-            plant
-          </Link>
-        </div>
+        <Link className="p-2 bg-slate-300 text-5xl" href="/plant">
+          plant
+        </Link>
       </main>
     </>
   );

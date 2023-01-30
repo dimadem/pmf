@@ -33,7 +33,7 @@ export default function ConnectMetamask(props) {
       <button className="p-2 bg-slate-300 rounded-sm" onClick={connect}>
         Connect Metamask
       </button>
-      <div className="flex flex-row justify-center p-4">Adress {address}</div>
+      <div className="flex flex-row justify-center p-4"> Adress: {address}</div>
     </>
   );
 }
