@@ -1,8 +1,9 @@
-import CanvasFrame from "../components/CanvasFrame";
+"use client";
 import { TreeContext } from "../context/tree.context";
 import { useContext, useState } from "react";
 import ConnectMetamask from "../components/ConnectMetamask";
 import useLsystem from "../hook/lsystem.hook";
+import P5Sketch from "../components/P5Sketch";
 
 export default function Plant() {
   const { setTree } = useContext(TreeContext);
@@ -16,6 +17,7 @@ export default function Plant() {
     setTree(data);
   };
 
+  console.log("data", data);
   return (
     <div className="w-screen h-screen">
       <div className="flex flex-col justify-center items-center">
@@ -30,14 +32,14 @@ export default function Plant() {
           Plant Tree
         </button>
         {/* сделать скриншот */}
-        <button
+        {/* <button
           className="rounded-sm bg-green-400 p-2"
           onClick={() => window.takeScreenshot()}
         >
           Скриншот
-        </button>
+        </button> */}
+        <P5Sketch />
       </div>
-      <CanvasFrame />
     </div>
   );
 }
