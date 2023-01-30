@@ -21,181 +21,105 @@
 // SOFTWARE.
 
 import React, { Component } from "react";
-import Sketch from "react-p5";
+import dynamic from "next/dynamic";
+// Will only import `react-p5` on client-side
+const Sketch = dynamic(() => import("react-p5").then((mod) => mod.default), {
+  ssr: false,
+});
 
-//TODO
-//1 Сделать, чтобы масштаб можно было или задавать, или центрировать, чтобы не слетала картинка в облака
-//2 Сделать разные цвета на разных итерациях
-//3 Добавить разбор кошелька в алгоритм
+export default function P5Sketch({ props }) {
+  console.log("props", props);
+  const [
+    { Trigger },
+    { BackgroundColor },
 
-//4 Придумать соответствие char кошелька к правилу (какие char на какую отрисовку - ветки, листья, разветвления)
-//5 Разбить итерация ==> char и так свое разбиение на уровень
-//6 Углы по char выбор соответствия
-//7 рандомайз по углу в секторе
+    { NumIterations },
 
-// 64 цифры в кошельке
-// 1 цвет фона
-// 1 толщина линии
-// набор символов для правил генеративного паттерна фона
-// набор символо для правил генеративного дерева
+    { TreeFormula },
+    { TreeTrunkColor },
+    { TreeCrownColor },
+    { TreeAngle },
+    { TreeLength },
+    { TreeLengthModifier },
+    { TreeStrokeWeight },
+    { TreeScale },
+    { TreePosition },
 
-// settings default
-// let angle = 0; //(60 * Math.PI) / 180; // угол
-// let axiom = ""; // аксиома
-// let sentence = ""; // первая точка построения
-// let mod = 0.03; //модификатор масштаба
-// let len = 100; // длинна сегмента
-// let iteration = 3; // итерации
-// let strWeight = 1; // толщина линии
-// let scl = 1; // масштаб
-// let rules = []; // массив правил
-let resRect = 350; // размер Canvas
-// let posX = 0; // позиция по X
-// let posY = 0; // позиция по Y
-// let bgColor; // цвет фона
-// // let strColor; // цвет линии
+    { PatternFormula },
+    { PatternColor },
+    { PatternAngle },
+    { PatternLength },
+    { PatternLengthModifier },
+    { PatternStrokeWeight },
+    { PatternScale },
+    { PatternPosition },
+  ] = props;
 
-// // правила по умолчанию
-// rules[0] = {
-//   a: "",
-//   b: "",
-// };
+  const resRect = 350; // размер канваса
 
-// //снежинка
-// angle = 60;
-// axiom = "F++F++F";
-// rules[0] = {
-//   a: "F",
-//   b: "F-F++F-F",
-// };
-// // settings
-// mod = 0.01;
-// iteration = 1;
-// strWeight = 1;
-// scl = 10;
-// posX = 200;
-// posY = 80;
-// bgColor = "#8BC78B";
-
-// //Серпинский
-// angle = 60;
-// axiom = "A";
-// rules[0] = {
-//   a: "A",
-//   b: "B-A-B",
-// };
-// rules[1] = {
-//   a: "B",
-//   b: "A+B+A",
-// };
-// // settings
-// mod = 0.02;
-// iteration = 10;
-// strWeight = 1;
-// scl = 0.8;
-// posX = 350;
-// posY = -40;
-// bgColor = "#8BC78B";
-
-//дракон
-// angle = 90;
-// axiom = "FX";
-// rules[0] = {
-//   a: "X",
-//   b: "X+YF",
-// };
-// rules[1] = {
-//   a: "Y",
-//   b: "FX-Y",
-// };
-// //settings
-// mod = 0.1;
-// iteration = 12;
-// scl = 1;
-// posX = 260;
-// posY = 100;
-// strWeight = 2;
-// bgColor = "#8BC78B";
-
-// //побеги
-// angle = 50;
-// axiom = "X";
-// rules[0] = {
-//   a: "F",
-//   b: "FF",
-// };
-// rules[1] = {
-//   a: "X",
-//   b: "F[+X]F[-X]+X",
-// };
-// // settings
-// mod = 0.08;
-// iteration = 6;
-// scl = 4;
-// strWeight = 2;
-// posX = 180;
-// posY = 20;
-// bgColor = "#8BC78B";
-
-export default class P5Sketch extends Component {
-  setup = (p5, canvasParentRef) => {
+  const setup = (p5, canvasParentRef) => {
     p5.createCanvas(resRect, resRect).parent(canvasParentRef);
     p5.angleMode(p5.DEGREES);
-    // p5.background(200);
     p5.noLoop();
     // use parent to render canvas in this ref (without that p5 render this canvas outside your component)
   };
 
-  draw = (p5) => {
-    // отриовка
-    const turtle = () => {
-      len *= mod; // модификатор на длинну сегмента на каждую итерацию рендера рендер
+  const draw = (p5) => {
+    p5.background(BackgroundColor);
 
-      p5.background(bgColor);
+    //! отрисовка паттерна
+    const patternTurtle = () => {
+      const PatternModifiedLength = PatternLength * PatternLengthModifier; // модификатор на длинну сегмента на каждую итерацию рендера рендер
+
       p5.resetMatrix();
       // выравнивание обьекта
-      p5.translate(resRect - posX, resRect - posY);
-      p5.scale(scl);
-      p5.strokeWeight(strWeight);
-      for (let i = 0; i < sentence.length; i++) {
-        let current = sentence.charAt(i);
+      p5.translate(resRect - PatternPosition[0], resRect - PatternPosition[1]);
+      p5.scale(PatternScale);
+      p5.strokeWeight(PatternStrokeWeight);
+      for (let i = 0; i < PatternFormula.length; i++) {
+        let current = PatternFormula.charAt(i);
         if (current === "F") {
-          p5.stroke("brown"); // коричневый
-          p5.line(0, 0, 0, -len);
-          p5.translate(0, -len);
+          p5.stroke(PatternColor);
+          p5.line(0, 0, 0, -PatternModifiedLength);
+          p5.translate(0, -PatternModifiedLength);
         }
         if (current === "X") {
-          p5.stroke("green"); // зеленый
-          p5.line(0, 0, 0, -len);
-          p5.translate(0, -len);
+          p5.stroke(PatternColor);
+          p5.line(0, 0, 0, -PatternModifiedLength);
+          p5.translate(0, -PatternModifiedLength);
         }
-        if (current === "L") {
+        if (current === "Y") {
           //random color
-          p5.stroke("p5.random(0, 250), p5.random(0, 250), p5.random(0, 250)");
-          p5.line(0, 0, 0, -len);
-          p5.translate(0, -len);
+          p5.stroke(
+            p5.random(0, 250),
+            p5.random(0, 250),
+            p5.random(0, 250),
+            p5.random(100, 200)
+          );
+          p5.line(0, 0, 0, -PatternModifiedLength);
+          p5.translate(0, -PatternModifiedLength);
         }
         if (current === "R") {
           //random color
           p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
-          p5.line(0, 0, 0, -len);
-          p5.translate(0, -len);
+          p5.line(0, 0, 0, -PatternModifiedLength);
+          p5.translate(0, -PatternModifiedLength);
         }
         if (current === "A") {
           //random color
           p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
-          p5.line(0, 0, 0, -len);
-          p5.translate(0, -len);
+          p5.line(0, 0, 0, -PatternModifiedLength);
+          p5.translate(0, -PatternModifiedLength);
         }
         if (current === "B") {
           //random color
           p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
-          p5.line(0, 0, 0, -len);
-          p5.translate(0, -len);
+          p5.line(0, 0, 0, -PatternModifiedLength);
+          p5.translate(0, -PatternModifiedLength);
         } else if (current === "+") {
-          p5.rotate(angle);
+          p5.rotate(PatternAngle);
         } else if (current === "-") {
-          p5.rotate(-angle);
+          p5.rotate(-PatternAngle);
         } else if (current === "[") {
           p5.push();
         } else if (current === "]") {
@@ -203,43 +127,64 @@ export default class P5Sketch extends Component {
         }
       }
     };
+    patternTurtle();
 
-    // // generate sentence for tree
-    // const generate = () => {
-    //   let temp = axiom; //что перебираем
-    //   let temp_sent = ""; //темп формулы дерева
-
-    //   for (let k = 0; k < iteration; k++) {
-    //     temp_sent = "";
-    //     // подобрать правило
-    //     for (let i = 0; i < temp.length; i++) {
-    //       let ch = temp.charAt(i);
-    //       var checked = false;
-    //       // если ни одно из правил не подошло
-    //       for (let j = 0; j < rules.length; j++) {
-    //         if (ch === rules[j].a) {
-    //           temp_sent += rules[j].b;
-    //           checked = true;
-    //           break;
-    //         }
-    //       }
-    //       // переносим символ из аксиомы
-    //       if (checked === false) {
-    //         temp_sent += ch;
-    //       }
-    //     }
-    //     //перекладываем
-    //     temp = temp_sent;
-    //   }
-    //   //готовая формула дерева
-    //   sentence = temp;
-
-    //   turtle();
-    // };
-    // generate();
+    //! отриcовка Дерева
+    const treeTurtle = () => {
+      const TreeModefiedLength = TreeLength * TreeLengthModifier; // модификатор на длинну сегмента на каждую итерацию рендера рендер
+      p5.resetMatrix();
+      // выравнивание обьекта
+      p5.translate(resRect - TreePosition[0], resRect - TreePosition[1]);
+      p5.scale(TreeScale);
+      p5.strokeWeight(TreeStrokeWeight);
+      for (let i = 0; i < TreeFormula.length; i++) {
+        let current = TreeFormula.charAt(i);
+        if (current === "F") {
+          p5.stroke(TreeTrunkColor); // коричневый
+          p5.line(0, 0, 0, -TreeModefiedLength);
+          p5.translate(0, -TreeModefiedLength);
+        }
+        if (current === "X") {
+          p5.stroke(TreeCrownColor); // зеленый
+          p5.line(0, 0, 0, -TreeModefiedLength);
+          p5.translate(0, -TreeModefiedLength);
+        }
+        if (current === "L") {
+          //random color
+          p5.stroke("p5.random(0, 250), p5.random(0, 250), p5.random(0, 250)");
+          p5.line(0, 0, 0, -TreeModefiedLength);
+          p5.translate(0, -TreeModefiedLength);
+        }
+        if (current === "R") {
+          //random color
+          p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
+          p5.line(0, 0, 0, -TreeModefiedLength);
+          p5.translate(0, -TreeModefiedLength);
+        }
+        if (current === "A") {
+          //random color
+          p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
+          p5.line(0, 0, 0, -TreeModefiedLength);
+          p5.translate(0, -TreeModefiedLength);
+        }
+        if (current === "B") {
+          //random color
+          p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
+          p5.line(0, 0, 0, -TreeModefiedLength);
+          p5.translate(0, -TreeModefiedLength);
+        } else if (current === "+") {
+          p5.rotate(TreeAngle);
+        } else if (current === "-") {
+          p5.rotate(-TreeAngle);
+        } else if (current === "[") {
+          p5.push();
+        } else if (current === "]") {
+          p5.pop();
+        }
+      }
+    };
+    treeTurtle();
   };
 
-  render() {
-    return <Sketch setup={this.setup} draw={this.draw} />;
-  }
+  return <>{props ? <Sketch setup={setup} draw={draw} /> : null} </>;
 }

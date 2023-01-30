@@ -35,7 +35,7 @@ export default function useLsystem(metamaskAddress) {
   //! цвет фона квадрата
   const [backgroundColor, setBackgroundColor] = useState("#8BC78B");
   // ! количество итераций
-  const [numIterations, setIterations] = useState(3);
+  const [numIterations, setIterations] = useState(4);
   ///////////////////////////
   //! правила, задающие формулу дерева
   //axiom - аксиома, то есть начальное состояние дерева
@@ -54,46 +54,56 @@ export default function useLsystem(metamaskAddress) {
   // цвет ствола дерева
   const [treeTrunkColor, setTreeTrunkColor] = useState([100, 85, 75]);
   // цвет кроны дерева
-  const [treeCrownColor, setTreeCrownColor] = useState([100, 85, 75]);
+  const [treeCrownColor, setTreeCrownColor] = useState([40, 139, 34]);
   //угол наклона
   const [treeAngle, setTreeAngle] = useState(50);
   // длина сегмента
-  const [treeLength, setTreeLength] = useState(3);
+  const [treeLength, setTreeLength] = useState(20);
   // Толщина ствола при рисовании будет уменьшаться в длинне
-  const [treeLengthModifier, setTreeLengthModifier] = useState(0.6);
+  const [treeLengthModifier, setTreeLengthModifier] = useState(0.08);
   // толщина линии
-  const [treeStrokeWeight, setTreeStrokeWeight] = useState(1);
+  const [treeStrokeWeight, setTreeStrokeWeight] = useState(4);
   // масштаб дерева
-  const [treeScale, setTreeScale] = useState(1);
+  const [treeScale, setTreeScale] = useState(5);
   // позиционирование на экране
-  const [treePosition, setTreePosition] = useState([0, 0]);
+  const [treePosition, setTreePosition] = useState([180, 20]);
   ///////////////////////////
 
   //!правила, задающие формулу паттерна
-  const [patternAxiom, setPatternAxiom] = useState("");
-  const [patternRules, setPatternRules] = useState([]);
+  const [patternAxiom, setPatternAxiom] = useState("FX");
+  const [patternRules, setPatternRules] = useState([
+    {
+      a: "X",
+      b: "X+YF",
+    },
+    {
+      a: "Y",
+      b: "FX-Y",
+    },
+  ]);
   const [patternFormula, setPatternFormula] = useState("");
   // цвет паттерна фона
-  const [patternColor, setPatternColor] = useState([100, 85, 75]);
+  const [patternColor, setPatternColor] = useState([250, 0, 0, 100]);
   // угол паттерна
-  const [patternAngle, setPatternAngle] = useState();
+  const [patternAngle, setPatternAngle] = useState(90);
   // длина сегмента
-  const [patternLength, setPatternLength] = useState(3);
+  const [patternLength, setPatternLength] = useState(200);
   // Толщина ствола при рисовании будет уменьшаться в длинне
-  const [patternLengthModifier, setPatternLengthModifier] = useState(0.6);
+  const [patternLengthModifier, setPatternLengthModifier] = useState(0.01);
   // толщина линии
-  const [patternStrokeWeight, setPatternStrokeWeight] = useState(1);
+  const [patternStrokeWeight, setPatternStrokeWeight] = useState(2);
   // масштаб паттерна
-  const [patternScale, setPatternScale] = useState(1);
+  const [patternScale, setPatternScale] = useState(20);
   // позиционирование на экране
-  const [patternPosition, setPatternPosition] = useState([0, 0]);
+  const [patternPosition, setPatternPosition] = useState([200, 260]);
 
-  //при изменении кошелька, меняем аксиому и формулу дерева
+  //при изменении кошелька, меняем аксиому -> формулы дерева и паттерна
   useEffect(() => {
-    setTreeAxiom("X");
+    setTreeAxiom("X"); // меняем на Metamask Address или что то еще
+    setPatternAxiom("FX"); // меняем на Metamask Address или что то еще
   }, [metamaskAddress]);
 
-  // генерируем правила построения дерева
+  //! генерируем формулу ДЕРЕВА
   useEffect(() => {
     let temp = treeAxiom; //что перебираем
     let temp_sent = ""; //темп формулы дерева
@@ -124,8 +134,44 @@ export default function useLsystem(metamaskAddress) {
     setTreeFormula(temp);
     setTrigger(true);
   }, [treeAxiom]);
+  ///////////////////////////
+  //! генерируем формулу ПАТТЕРНА
+  useEffect(() => {
+    let temp = patternAxiom; //что перебираем
+    let temp_sent = ""; //темп формулы дерева
+
+    for (let k = 0; k < numIterations; k++) {
+      temp_sent = ""; // обнуляем переменную сегмента
+      // подобрать правило
+      for (let i = 0; i < temp.length; i++) {
+        let ch = temp.charAt(i);
+        let checked = false;
+        // если ни одно из правил не подошло
+        for (let j = 0; j < patternRules.length; j++) {
+          if (ch === patternRules[j].a) {
+            temp_sent += patternRules[j].b;
+            checked = true;
+            break;
+          }
+        }
+        // переносим символ из аксиомы
+        if (checked === false) {
+          temp_sent += ch;
+        }
+      }
+      //перекладываем
+      temp = temp_sent;
+    }
+    //готовая формула дерева
+    setPatternFormula(temp);
+    setTrigger(true);
+  }, [patternAxiom]);
 
   return [
+    { Trigger: trigger },
+
+    { BackgroundColor: backgroundColor },
+
     { numIterations: numIterations },
 
     { TreeFormula: treeFormula },
@@ -146,9 +192,82 @@ export default function useLsystem(metamaskAddress) {
     { PatternStrokeWeight: patternStrokeWeight },
     { PatternScale: patternScale },
     { PatternPosition: patternPosition },
-
-    { BackgroundColor: backgroundColor },
-
-    { Trigger: trigger },
   ];
 }
+///////////////////////////////////////////
+
+// //!снежинка
+// angle = 60;
+// axiom = "F++F++F";
+// rules[0] = {
+//   a: "F",
+//   b: "F-F++F-F",
+// };
+// //? settings
+// mod = 0.01;
+// iteration = 1;
+// strWeight = 1;
+// scl = 10;
+// posX = 200;
+// posY = 80;
+// bgColor = "#8BC78B";
+///////////////////////////////////////////
+// //!Серпинский
+// angle = 60;
+// axiom = "A";
+// rules[0] = {
+//   a: "A",
+//   b: "B-A-B",
+// };
+// rules[1] = {
+//   a: "B",
+//   b: "A+B+A",
+// };
+// //? settings
+// mod = 0.02;
+// iteration = 10;
+// strWeight = 1;
+// scl = 0.8;
+// posX = 350;
+// posY = -40;
+// bgColor = "#8BC78B";
+///////////////////////////////////////////
+//!дракон
+// angle = 90;
+// axiom = "FX";
+// rules[0] = {
+//   a: "X",
+//   b: "X+YF",
+// };
+// rules[1] = {
+//   a: "Y",
+//   b: "FX-Y",
+// };
+// //?settings
+// mod = 0.1;
+// iteration = 12;
+// scl = 1;
+// posX = 260;
+// posY = 100;
+// strWeight = 2;
+// bgColor = "#8BC78B";
+///////////////////////////////////////////
+// //!побеги
+// angle = 50;
+// axiom = "X";
+// rules[0] = {
+//   a: "F",
+//   b: "FF",
+// };
+// rules[1] = {
+//   a: "X",
+//   b: "F[+X]F[-X]+X",
+// };
+// //? settings
+// mod = 0.08;
+// iteration = 6;
+// scl = 4;
+// strWeight = 2;
+// posX = 180;
+// posY = 20;
+// bgColor = "#8BC78B";

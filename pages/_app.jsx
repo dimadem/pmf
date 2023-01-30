@@ -1,10 +1,10 @@
 import "../styles/globals.css";
-import { TreeContextProvider } from "../context/tree.context";
+import { LSystemContextProvider } from "../context/lsystem.context";
 
 export default function App({ Component, pageProps }) {
   return (
-    <TreeContextProvider {...pageProps}>
+    <LSystemContextProvider {...pageProps}>
       <Component {...pageProps} />
-    </TreeContextProvider>
+    </LSystemContextProvider>
   );
 }
