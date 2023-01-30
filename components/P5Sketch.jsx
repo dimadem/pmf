@@ -40,26 +40,26 @@ import Sketch from "react-p5";
 // набор символо для правил генеративного дерева
 
 // settings default
-let angle = 0; //(60 * Math.PI) / 180; // угол
-let axiom = ""; // аксиома
-let sentence = ""; // первая точка построения
-let mod = 0.03; //модификатор масштаба
-let len = 100; // длинна сегмента
-let iteration = 3; // итерации
-let strWeight = 1; // толщина линии
-let scl = 1; // масштаб
-let rules = []; // массив правил
+// let angle = 0; //(60 * Math.PI) / 180; // угол
+// let axiom = ""; // аксиома
+// let sentence = ""; // первая точка построения
+// let mod = 0.03; //модификатор масштаба
+// let len = 100; // длинна сегмента
+// let iteration = 3; // итерации
+// let strWeight = 1; // толщина линии
+// let scl = 1; // масштаб
+// let rules = []; // массив правил
 let resRect = 350; // размер Canvas
-let posX = 0; // позиция по X
-let posY = 0; // позиция по Y
-let bgColor; // цвет фона
-// let strColor; // цвет линии
+// let posX = 0; // позиция по X
+// let posY = 0; // позиция по Y
+// let bgColor; // цвет фона
+// // let strColor; // цвет линии
 
-// правила по умолчанию
-rules[0] = {
-  a: "",
-  b: "",
-};
+// // правила по умолчанию
+// rules[0] = {
+//   a: "",
+//   b: "",
+// };
 
 // //снежинка
 // angle = 60;
@@ -117,25 +117,25 @@ rules[0] = {
 // strWeight = 2;
 // bgColor = "#8BC78B";
 
-//побеги
-angle = 50;
-axiom = "X";
-rules[0] = {
-  a: "F",
-  b: "FF",
-};
-rules[1] = {
-  a: "X",
-  b: "F[+X]F[-X]+X",
-};
-// settings
-mod = 0.08;
-iteration = 6;
-scl = 4;
-strWeight = 2;
-posX = 180;
-posY = 20;
-bgColor = "#8BC78B";
+// //побеги
+// angle = 50;
+// axiom = "X";
+// rules[0] = {
+//   a: "F",
+//   b: "FF",
+// };
+// rules[1] = {
+//   a: "X",
+//   b: "F[+X]F[-X]+X",
+// };
+// // settings
+// mod = 0.08;
+// iteration = 6;
+// scl = 4;
+// strWeight = 2;
+// posX = 180;
+// posY = 20;
+// bgColor = "#8BC78B";
 
 export default class P5Sketch extends Component {
   setup = (p5, canvasParentRef) => {
@@ -149,6 +149,8 @@ export default class P5Sketch extends Component {
   draw = (p5) => {
     // отриовка
     const turtle = () => {
+      len *= mod; // модификатор на длинну сегмента на каждую итерацию рендера рендер
+
       p5.background(bgColor);
       p5.resetMatrix();
       // выравнивание обьекта
@@ -202,41 +204,39 @@ export default class P5Sketch extends Component {
       }
     };
 
-    // generate sentence for tree
-    const generate = () => {
-      len *= mod; // модификатор на длинну сегмента на рендер
+    // // generate sentence for tree
+    // const generate = () => {
+    //   let temp = axiom; //что перебираем
+    //   let temp_sent = ""; //темп формулы дерева
 
-      let temp = axiom; //что перебираем
-      let temp_sent = ""; //темп формулы дерева
+    //   for (let k = 0; k < iteration; k++) {
+    //     temp_sent = "";
+    //     // подобрать правило
+    //     for (let i = 0; i < temp.length; i++) {
+    //       let ch = temp.charAt(i);
+    //       var checked = false;
+    //       // если ни одно из правил не подошло
+    //       for (let j = 0; j < rules.length; j++) {
+    //         if (ch === rules[j].a) {
+    //           temp_sent += rules[j].b;
+    //           checked = true;
+    //           break;
+    //         }
+    //       }
+    //       // переносим символ из аксиомы
+    //       if (checked === false) {
+    //         temp_sent += ch;
+    //       }
+    //     }
+    //     //перекладываем
+    //     temp = temp_sent;
+    //   }
+    //   //готовая формула дерева
+    //   sentence = temp;
 
-      for (let k = 0; k < iteration; k++) {
-        temp_sent = "";
-        // подобрать правило
-        for (let i = 0; i < temp.length; i++) {
-          let ch = temp.charAt(i);
-          var checked = false;
-          // если ни одно из правил не подошло
-          for (let j = 0; j < rules.length; j++) {
-            if (ch === rules[j].a) {
-              temp_sent += rules[j].b;
-              checked = true;
-              break;
-            }
-          }
-          // переносим символ из аксиомы
-          if (checked === false) {
-            temp_sent += ch;
-          }
-        }
-        //перекладываем
-        temp = temp_sent;
-      }
-      //готовая формула дерева
-      sentence = temp;
-
-      turtle();
-    };
-    generate();
+    //   turtle();
+    // };
+    // generate();
   };
 
   render() {
