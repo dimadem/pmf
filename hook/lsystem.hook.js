@@ -62,7 +62,7 @@ export default function useLsystem(metamaskAddress) {
   // Толщина ствола при рисовании будет уменьшаться в длинне
   const [treeLengthModifier, setTreeLengthModifier] = useState(0.08);
   // толщина линии
-  const [treeStrokeWeight, setTreeStrokeWeight] = useState(4);
+  const [treeStrokeWeight, setTreeStrokeWeight] = useState(2);
   // масштаб дерева
   const [treeScale, setTreeScale] = useState(5);
   // позиционирование на экране
@@ -91,13 +91,15 @@ export default function useLsystem(metamaskAddress) {
   // Толщина ствола при рисовании будет уменьшаться в длинне
   const [patternLengthModifier, setPatternLengthModifier] = useState(0.01);
   // толщина линии
-  const [patternStrokeWeight, setPatternStrokeWeight] = useState(2);
+  const [patternStrokeWeight, setPatternStrokeWeight] = useState(0.5);
   // масштаб паттерна
   const [patternScale, setPatternScale] = useState(20);
   // позиционирование на экране
   const [patternPosition, setPatternPosition] = useState([200, 260]);
 
   //при изменении кошелька, меняем аксиому -> формулы дерева и паттерна
+  //7893d 0bcfD 93A44 28443326c083ff23F935Df001
+
   useEffect(() => {
     setTreeAxiom("X"); // меняем на Metamask Address или что то еще
     setPatternAxiom("FX"); // меняем на Metamask Address или что то еще
