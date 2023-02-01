@@ -78,6 +78,8 @@ export default function P5Sketch({ props }) {
       p5.translate(resRect - PatternPosition[0], resRect - PatternPosition[1]);
       p5.scale(PatternScale);
       p5.strokeWeight(PatternStrokeWeight);
+
+      
       for (let i = 0; i < PatternFormula.length; i++) {
         let current = PatternFormula.charAt(i);
         if (current === "F") {
@@ -101,6 +103,12 @@ export default function P5Sketch({ props }) {
           p5.line(0, 0, 0, -PatternModifiedLength);
           p5.translate(0, -PatternModifiedLength);
         }
+        if (current === "L") {
+          //random color
+          p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
+          p5.line(0, 0, 0, -PatternModifiedLength);
+          p5.translate(0, -PatternModifiedLength);
+        }
         if (current === "R") {
           //random color
           p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
@@ -118,13 +126,31 @@ export default function P5Sketch({ props }) {
           p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
           p5.line(0, 0, 0, -PatternModifiedLength);
           p5.translate(0, -PatternModifiedLength);
-        } else if (current === "+") {
+        } 
+        if (current === "C") {
+          //random color
+          p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
+          p5.line(0, 0, 0, -PatternModifiedLength);
+          p5.translate(0, -PatternModifiedLength);
           p5.rotate(PatternAngle);
-        } else if (current === "-") {
+        }
+        if (current === "D") {
+          //random color
+          p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
+          p5.line(0, 0, 0, -PatternModifiedLength);
+          p5.translate(0, -PatternModifiedLength);
           p5.rotate(-PatternAngle);
-        } else if (current === "[") {
+        }
+        else if (current === "+") {
+          p5.rotate(PatternAngle);
+        } 
+        else if (current === "-") {
+          p5.rotate(-PatternAngle);
+        } 
+        else if (current === "[") {
           p5.push();
-        } else if (current === "]") {
+        } 
+        else if (current === "]") {
           p5.pop();
         }
       }
@@ -140,6 +166,11 @@ export default function P5Sketch({ props }) {
       p5.translate(resRect - TreePosition[0], resRect - TreePosition[1]);
       p5.scale(TreeScale);
       p5.strokeWeight(TreeStrokeWeight);
+
+      //рандомный угол
+      //TreeAngle = Math.floor((p5.random(0,100)/100 + 1) * TreeAngle);
+
+
       for (let i = 0; i < TreeFormula.length; i++) {
         let current = TreeFormula.charAt(i);
         if (current === "F") {
@@ -175,13 +206,17 @@ export default function P5Sketch({ props }) {
           p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
           p5.line(0, 0, 0, -TreeModefiedLength);
           p5.translate(0, -TreeModefiedLength);
-        } else if (current === "+") {
+        } 
+         if (current === "+") {
           p5.rotate(TreeAngle);
-        } else if (current === "-") {
+        } 
+        else if (current === "-") {
           p5.rotate(-TreeAngle);
-        } else if (current === "[") {
+        } 
+        else if (current === "[") {
           p5.push();
-        } else if (current === "]") {
+        } 
+        else if (current === "]") {
           p5.pop();
         }
       }
