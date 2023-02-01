@@ -34,8 +34,8 @@ export default function useLsystem(metamaskAddress) {
   ///////////////////////////
   //! цвет фона квадрата
   const [backgroundColor, setBackgroundColor] = useState("#8BC78B");
-  // ! количество итераций
-  const [numIterations, setIterations] = useState(4);
+  // ! общее количество итераций
+  const [globalIterations, setGlobalIterations] = useState(0);
   ///////////////////////////
   //! правила, задающие формулу дерева
   //axiom - аксиома, то есть начальное состояние дерева
@@ -51,6 +51,8 @@ export default function useLsystem(metamaskAddress) {
     },
   ]);
   const [treeFormula, setTreeFormula] = useState("");
+  // количество итераций в дереве
+  const [treeIterations, setTreeIterations] = useState(4);
   // цвет ствола дерева
   const [treeTrunkColor, setTreeTrunkColor] = useState([100, 85, 75]);
   // цвет кроны дерева
@@ -82,6 +84,8 @@ export default function useLsystem(metamaskAddress) {
     },
   ]);
   const [patternFormula, setPatternFormula] = useState("");
+  // количество итераций в паттерне
+  const [patternIterations, setPatternIterations] = useState(7);
   // цвет паттерна фона
   const [patternColor, setPatternColor] = useState([250, 0, 0, 100]);
   // угол паттерна
@@ -100,6 +104,19 @@ export default function useLsystem(metamaskAddress) {
   //при изменении кошелька, меняем аксиому -> формулы дерева и паттерна
   //7893d 0bcfD 93A44 28443326c083ff23F935Df001
 
+  //! апдейт настроек после итераций
+  useEffect(() => {
+    // апдейт итерации дерева
+    setTreeIterations(treeIterations + globalIterations);
+    // апдейт итерации паттерна
+    setPatternIterations(patternIterations + globalIterations);
+    // апдейт масштаба дерева
+    setTreeScale(treeScale - globalIterations);
+    // апдейт масштаба паттерна
+    setPatternScale(patternScale - globalIterations);
+  }, [globalIterations]);
+
+  //! задаем аксиуму проекта
   useEffect(() => {
     setTreeAxiom("X"); // меняем на Metamask Address или что то еще
     setPatternAxiom("FX"); // меняем на Metamask Address или что то еще
@@ -110,7 +127,7 @@ export default function useLsystem(metamaskAddress) {
     let temp = treeAxiom; //что перебираем
     let temp_sent = ""; //темп формулы дерева
 
-    for (let k = 0; k < numIterations; k++) {
+    for (let k = 0; k < treeIterations; k++) {
       temp_sent = ""; // обнуляем переменную сегмента
       // подобрать правило
       for (let i = 0; i < temp.length; i++) {
@@ -142,7 +159,7 @@ export default function useLsystem(metamaskAddress) {
     let temp = patternAxiom; //что перебираем
     let temp_sent = ""; //темп формулы дерева
 
-    for (let k = 0; k < numIterations; k++) {
+    for (let k = 0; k < patternIterations; k++) {
       temp_sent = ""; // обнуляем переменную сегмента
       // подобрать правило
       for (let i = 0; i < temp.length; i++) {
@@ -174,9 +191,10 @@ export default function useLsystem(metamaskAddress) {
 
     { BackgroundColor: backgroundColor },
 
-    { numIterations: numIterations },
+    { GlobalIterations: globalIterations },
 
     { TreeFormula: treeFormula },
+    { TreeIterations: treeIterations },
     { TreeTrunkColor: treeTrunkColor },
     { TreeCrownColor: treeCrownColor },
     { TreeAngle: treeAngle },
@@ -187,6 +205,7 @@ export default function useLsystem(metamaskAddress) {
     { TreePosition: treePosition },
 
     { PatternFormula: patternFormula },
+    { PatternIterations: patternIterations },
     { PatternColor: patternColor },
     { PatternAngle: patternAngle },
     { PatternLength: patternLength },

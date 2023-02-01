@@ -9,9 +9,10 @@ export const LSystemContextProvider = ({ children }) => {
 
     { BackgroundColor: [] },
 
-    { numIterations: 0 },
+    { GlobalIterations: 0 },
 
     { TreeFormula: "" },
+    { TreeIterations: 0 },
     { TreeTrunkColor: [] },
     { TreeCrownColor: [] },
     { TreeAngle: 0 },
@@ -22,6 +23,7 @@ export const LSystemContextProvider = ({ children }) => {
     { TreePosition: [] },
 
     { PatternFormula: "" },
+    { PatternIterations: 0 },
     { PatternColor: [] },
     { PatternAngle: 0 },
     { PatternLength: 0 },

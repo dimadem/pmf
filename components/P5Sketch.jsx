@@ -28,14 +28,15 @@ const Sketch = dynamic(() => import("react-p5").then((mod) => mod.default), {
 });
 
 export default function P5Sketch({ props }) {
-  console.log("props", props);
+  // console.log("props", props);
   const [
     { Trigger },
     { BackgroundColor },
 
-    { NumIterations },
+    { GlobalIterations },
 
     { TreeFormula },
+    { TreeIterations },
     { TreeTrunkColor },
     { TreeCrownColor },
     { TreeAngle },
@@ -46,6 +47,7 @@ export default function P5Sketch({ props }) {
     { TreePosition },
 
     { PatternFormula },
+    { PatternIterations },
     { PatternColor },
     { PatternAngle },
     { PatternLength },
@@ -127,6 +129,7 @@ export default function P5Sketch({ props }) {
         }
       }
     };
+
     patternTurtle();
 
     //! отриcовка Дерева
