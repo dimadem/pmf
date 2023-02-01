@@ -38,29 +38,29 @@ export default function useLsystem(metamaskAddress) {
   //! цвет фона квадрата
   const [backgroundColor, setBackgroundColor] = useState("#8BC78B");
   // ! общее количество итераций
-  const [globalIterations, setGlobalIterations] = useState(0);
+  const [globalIterations, setGlobalIterations] = useState(1);
   ///////////////////////////
   //! правила, задающие формулу дерева
   //axiom - аксиома, то есть начальное состояние дерева
-  const [treeAxiom, setTreeAxiom] = useState("XFFF");
+  const [treeAxiom, setTreeAxiom] = useState("FX");
   const [treeRules, setTreeRules] = useState([
     {
-      a: "F",//F == FF
-      b: "FF",
+      a: "F", //F == FF
+      b: "F[+X][++X][+++X][++++X][-X][--F][+++F][--X][---X][----X]",
     },
     {
       a: "X",
-      b: "F[+X]F[-X]+X",//"F[+X][++F]F[--F][---F][-X]+X",
+      b: "F[+X]F[-X]+X", //"F[+X][++F]F[--F][---F][-X]+X",
     },
     {
       a: "b",
       b: "F[+X][++F]F[--F][---F][-X]+X",
-      c: 'white',
     },
   ]);
   const [treeFormula, setTreeFormula] = useState("");
+  console.log("treeFormula", treeFormula);
   // количество итераций в дереве
-  const [treeIterations, setTreeIterations] = useState(1);
+  const [treeIterations, setTreeIterations] = useState(treeAxiom.length);
   // цвет ствола дерева
   const [treeTrunkColor, setTreeTrunkColor] = useState([100, 85, 75]);
   // цвет кроны дерева
@@ -74,13 +74,12 @@ export default function useLsystem(metamaskAddress) {
   // толщина линии
   const [treeStrokeWeight, setTreeStrokeWeight] = useState(0.2);
   // масштаб дерева
-  const [treeScale, setTreeScale] = useState(25);
+  const [treeScale, setTreeScale] = useState(5);
   // позиционирование на экране
   const [treePosition, setTreePosition] = useState([180, 20]);
   ///////////////////////////
-
   //!правила, задающие формулу паттерна
-  const [patternAxiom, setPatternAxiom] = useState("C");
+  const [patternAxiom, setPatternAxiom] = useState("CCC");
   const [patternRules, setPatternRules] = useState([
     {
       a: "C",
@@ -91,9 +90,12 @@ export default function useLsystem(metamaskAddress) {
       b: "CD",
     },
   ]);
+
   const [patternFormula, setPatternFormula] = useState("");
   // количество итераций в паттерне
-  const [patternIterations, setPatternIterations] = useState(17);
+  const [patternIterations, setPatternIterations] = useState(
+    patternAxiom.length + 16
+  );
   // цвет паттерна фона
   const [patternColor, setPatternColor] = useState([250, 0, 0, 100]);
   // угол паттерна
@@ -124,11 +126,11 @@ export default function useLsystem(metamaskAddress) {
     setPatternScale(patternScale - globalIterations);
   }, [globalIterations]);
 
-  //! задаем аксиому проекта
-  useEffect(() => {
-    setTreeAxiom("X"); // меняем на Metamask Address или что то еще
-    setPatternAxiom("C"); // меняем на Metamask Address или что то еще
-  }, [metamaskAddress]);
+  // //! задаем аксиому проекта
+  // useEffect(() => {
+  //   setTreeAxiom("X"); // меняем на Metamask Address или что то еще
+  //   setPatternAxiom("C"); // меняем на Metamask Address или что то еще
+  // }, [metamaskAddress]);
 
   //! генерируем формулу ДЕРЕВА
   useEffect(() => {
@@ -322,8 +324,8 @@ export default function useLsystem(metamaskAddress) {
       posX = 180;
       posY = 20;
       */
-      
-      /*
+
+/*
       //соты
       angle = 60;
       axiom = "C";

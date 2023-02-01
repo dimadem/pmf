@@ -79,10 +79,14 @@ export default function P5Sketch({ props }) {
       p5.scale(PatternScale);
       p5.strokeWeight(PatternStrokeWeight);
 
-      
       for (let i = 0; i < PatternFormula.length; i++) {
         let current = PatternFormula.charAt(i);
         if (current === "F") {
+          p5.stroke(PatternColor);
+          p5.line(0, 0, 0, -PatternModifiedLength);
+          p5.translate(0, -PatternModifiedLength);
+        }
+        if (current === "X") {
           p5.stroke(PatternColor);
           p5.line(0, 0, 0, -PatternModifiedLength);
           p5.translate(0, -PatternModifiedLength);
@@ -126,7 +130,7 @@ export default function P5Sketch({ props }) {
           p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
           p5.line(0, 0, 0, -PatternModifiedLength);
           p5.translate(0, -PatternModifiedLength);
-        } 
+        }
         if (current === "C") {
           //random color
           p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
@@ -140,17 +144,13 @@ export default function P5Sketch({ props }) {
           p5.line(0, 0, 0, -PatternModifiedLength);
           p5.translate(0, -PatternModifiedLength);
           p5.rotate(-PatternAngle);
-        }
-        else if (current === "+") {
+        } else if (current === "+") {
           p5.rotate(PatternAngle);
-        } 
-        else if (current === "-") {
+        } else if (current === "-") {
           p5.rotate(-PatternAngle);
-        } 
-        else if (current === "[") {
+        } else if (current === "[") {
           p5.push();
-        } 
-        else if (current === "]") {
+        } else if (current === "]") {
           p5.pop();
         }
       }
@@ -170,7 +170,6 @@ export default function P5Sketch({ props }) {
       //рандомный угол
       //TreeAngle = Math.floor((p5.random(0,100)/100 + 1) * TreeAngle);
 
-
       for (let i = 0; i < TreeFormula.length; i++) {
         let current = TreeFormula.charAt(i);
         if (current === "F") {
@@ -178,8 +177,15 @@ export default function P5Sketch({ props }) {
           p5.line(0, 0, 0, -TreeModefiedLength);
           p5.translate(0, -TreeModefiedLength);
         }
-        if (current === "X") {
+        // итерация 1
+        if (current === "X" && GlobalIterations === 1) {
           p5.stroke(TreeCrownColor); // зеленый
+          p5.line(0, 0, 0, -TreeModefiedLength);
+          p5.translate(0, -TreeModefiedLength);
+        }
+        // итерация 2
+        if (current === "X" && GlobalIterations === 2) {
+          p5.stroke("black"); // зеленый
           p5.line(0, 0, 0, -TreeModefiedLength);
           p5.translate(0, -TreeModefiedLength);
         }
@@ -206,17 +212,14 @@ export default function P5Sketch({ props }) {
           p5.stroke(p5.random(0, 250), p5.random(0, 250), p5.random(0, 250));
           p5.line(0, 0, 0, -TreeModefiedLength);
           p5.translate(0, -TreeModefiedLength);
-        } 
-         if (current === "+") {
+        }
+        if (current === "+") {
           p5.rotate(TreeAngle);
-        } 
-        else if (current === "-") {
+        } else if (current === "-") {
           p5.rotate(-TreeAngle);
-        } 
-        else if (current === "[") {
+        } else if (current === "[") {
           p5.push();
-        } 
-        else if (current === "]") {
+        } else if (current === "]") {
           p5.pop();
         }
       }
