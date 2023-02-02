@@ -16,7 +16,8 @@ contract TreeStyle is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
 
     uint256 public immutable firstGrowthTime;
     uint256 public immutable endTime;
-    uint256 public constant MONTH = 30 days;
+    uint256 public constant MONTH = 30; //value for testing
+    uint256 public constant MIN_COST = 0.001 ether; //value for testing
 
     mapping(uint256 => uint256) public tokenLvl;
     mapping(address => uint256) public growthsDone;
@@ -26,12 +27,13 @@ contract TreeStyle is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     Counters.Counter private _tokenIdCounter;
 
     constructor() ERC721("Tree Style", "TREE") {
-        firstGrowthTime = block.timestamp + 9 days;
-        endTime = block.timestamp + 365 * 30 days;
+        firstGrowthTime = block.timestamp + 10; //value for testing
+        endTime = block.timestamp + 12 * MONTH;
     }
 
-    function safeMint(address to, string memory uri) public onlyOwner {
+    function safeMint(address to, string memory uri) public payable {
         require(balanceOf(to) == 0, "Only one token available");
+        require(msg.value >= MIN_COST, "Not enough ETH");
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
@@ -72,13 +74,19 @@ contract TreeStyle is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         rewardToken = OxygenToken(_rewardToken);
     }
 
+    //dev must be changed later. Sets for tesing
+    function withdraw() public onlyOwner {
+        payable(msg.sender).transfer(address(this).balance);
+    }
+
     // The following functions are overrides required by Solidity. 
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
         internal
         override(ERC721, ERC721Enumerable)
-    {
-        revert("Not available for transfer");
+    {   
+        require(from == address(0) || to == address(0), "Transfer not allowed");
+        super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
