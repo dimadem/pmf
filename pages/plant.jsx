@@ -1,10 +1,9 @@
 import CanvasFrame from "../components/CanvasFrame";
 import { TreeContext } from "../context/tree.context";
 import { useContext, useState } from "react";
-import ConnectMetamask from "../components/ConnectMetamask";
 import useLsystem from "../hook/lsystem.hook";
-
-
+import Button from "../components/UI/Button";
+import Connect from "../components/Connect";
 
 export default function plant() {
   const { setTree } = useContext(TreeContext);
@@ -17,23 +16,19 @@ export default function plant() {
   const handleChangeTree = () => {
     setTree(data);
   };
-
+  const takeScreenShot = () => {
+    window.takeScreenshot();
+  };
 
   return (
     <div className="w-screen h-screen">
       <div className="flex flex-col justify-center items-center">
         {/* /подключение к метамаску ведет на новую страницу с ссылкой (адрес кошелька) */}
-        <ConnectMetamask onSetMetamaskAddress={setMetamaskAddress} />
-        <button
-          className="rounded-sm bg-green-400 p-2"
-          onClick={handleChangeTree}
-        >
-          Plant Tree
-        </button>
-        // todo сохранение скриншота - done
-        <button className="rounded-sm bg-green-400 p-2" onClick={() => window.takeScreenshot()}>Скриншот</button>
+        <Connect />
+        <Button onClick={handleChangeTree}>Plant Tree</Button>
+        <Button onClick={takeScreenShot}>Скриншот</Button>
       </div>
-    <CanvasFrame/>
+      <CanvasFrame />
     </div>
   );
 }
