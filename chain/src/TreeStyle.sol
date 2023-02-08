@@ -9,6 +9,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./OxygenToken.sol";
 
+// TreeStyle 0x8EA3291b689275b80ee347E99D484736d5b9086E
+// Oxygen 0xCb966524d5344eA5C1D98e9229AE1EFf590bDc08
+
 contract TreeStyle is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
 
@@ -31,6 +34,11 @@ contract TreeStyle is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         endTime = block.timestamp + 12 * MONTH;
     }
 
+    modifier hasToken() {
+        require(balanceOf(msg.sender) > 0, "User has no tree");
+        _;
+    }
+
     function safeMint(address to, string memory uri) public payable {
         require(balanceOf(to) == 0, "Only one token available");
         require(msg.value >= MIN_COST, "Not enough ETH");
@@ -43,24 +51,25 @@ contract TreeStyle is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     //@notice Tree growth one time
     //@dev Consider add growths multiple times
     //@dev Func must be called only from frontend with specific tokenURI
-    function grow(string memory uri) public {
+    function grow(string memory uri) public hasToken {
         require(_availableUserGrowths(msg.sender) > 0, "The tree has not yet grown");
         uint256 tokenId = tokenOfOwnerByIndex(msg.sender, 0);
         growthsDone[msg.sender]++;
+        tokenLvl[tokenId]++;
         _setTokenURI(tokenId, uri);
     }
 
     //@notice Get number of available growths
     function _availableUserGrowths(address user) public view returns (uint256) {
-        require(block.timestamp > firstGrowthTime, "No growth yet");
-        if (block.timestamp > endTime) return 12;
-        uint256 allGrothws = (block.timestamp - firstGrowthTime) / MONTH + 1;
+        require(block.timestamp >= firstGrowthTime, "No growth yet");
+        if (block.timestamp > endTime) return 12 - growthsDone[user];
+        uint256 allGrothws = 1 + (block.timestamp - firstGrowthTime) / MONTH;
         return allGrothws - growthsDone[user];
     }
 
     //@notice Mint 1 reward token to user and burn tree
     //@dev Consider minting some tokens each month
-    function getOxygen() public {
+    function getOxygen() public hasToken {
         require(block.timestamp > endTime, "Not available yet");
         require(growthsDone[msg.sender] == 12, "The tree has not grown enough yet");
         uint256 tokenId = tokenOfOwnerByIndex(msg.sender, 0);
