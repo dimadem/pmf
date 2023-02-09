@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Inter } from "@next/font/google";
 import Link from "next/link";
 import { useState } from "react";
-import ConnectMetamask from "../components/ConnectMetamask";
+// import ConnectMetamask from "../components/ConnectMetamask";
 
 const inter = Inter({ subsets: ["latin"] });
 

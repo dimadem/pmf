@@ -1,21 +1,23 @@
 import { ethers } from "ethers";
-import { useEffect } from "react";
+import { useContext, useState } from "react";
 import Button from "./UI/Button";
+import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
+import { NftMetadataContext } from "../context/nftMetadata.context";
 
 const Connect = () => {
-  // useEffect(() => {
+  const [address, setAddress] = useState();
+  const [conected, setConnecting] = useState(false);
+  const { nft, setNft } = useContext(NftMetadataContext);
 
   const handleConnectButton = async () => {
-    // решить вопрос про window not defined из-за SSR
-
     const { ethereum } = window;
-    const accounts = await ethereum.request({
+    const currentAddress = await ethereum.request({
       method: "eth_requestAccounts",
     });
-    console.log("Acc address", accounts);
-    const provider = new ethers.providers.Web3Provider(ethereum);
+    setAddress(currentAddress[0]);
+    console.log("Acc address", currentAddress);
 
-    // }, []);
+    const provider = new ethers.providers.Web3Provider(ethereum);
     const address = "0x8EA3291b689275b80ee347E99D484736d5b9086E";
     const abi = [
       { inputs: [], stateMutability: "nonpayable", type: "constructor" },
@@ -377,14 +379,29 @@ const Connect = () => {
     const contract = new ethers.Contract(address, abi, provider);
     try {
       await provider.send("eth_requestAccounts", []);
-      const minted = await contract.balanceOf(
+      const totalNfts = await contract.balanceOf(
         "0xbBa6073b9e56f82769d2ad39Eb43b8902eDBFc37"
       );
-      console.log("minted", minted);
+      console.log("minted", totalNfts);
     } catch (error) {
       console.error(error);
     }
+    setConnecting(true);
   };
-  return <Button onClick={handleConnectButton}> Connect Metamask </Button>;
+  return (
+    <>
+      {!conected ? (
+        <Button onClick={handleConnectButton}> Connect Metamask </Button>
+      ) : (
+        <div>
+          <Jazzicon diameter={25} seed={jsNumberForAddress(address)} />
+          <div>
+            <h6>{address}</h6>
+            <p>Connected</p>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 export default Connect;
